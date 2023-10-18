@@ -7,6 +7,23 @@
     "home_page_url": "http://badcandy0.github.io",
     "items": [
         {
+            "id": "http://badcandy0.github.io/2023/10/18/%E7%B1%B3%E5%93%88%E6%B8%B8%E6%A0%A1%E6%8B%9B-dp%E7%AE%97%E6%B3%95/",
+            "url": "http://badcandy0.github.io/2023/10/18/%E7%B1%B3%E5%93%88%E6%B8%B8%E6%A0%A1%E6%8B%9B-dp%E7%AE%97%E6%B3%95/",
+            "title": "米哈游校招-dp算法",
+            "date_published": "2023-10-18T02:02:44.459Z",
+            "content_html": "<h1 id=\"题目描述\"><a class=\"anchor\" href=\"#题目描述\">#</a> 题目描述</h1>\n<p>米小游都快保底了还没抽到希儿，好生气哦！只能打会活动再拿点水晶了。米小游和世界第一可爱的魔法少女<em> TeRiRi</em> 正在打 BOSS，当 BOSS 血量小于等于 0 时，BOSS 死亡。<em>TeRiRi</em> 的血量为 h，有一套牌，在一轮中，他会按顺序一张一张的将卡牌打出，套牌中有两种卡牌：</p>\n<ol>\n<li>时来运转，获得 x 个幸运币</li>\n<li>幸运一掷造成 x 点伤害，并投掷所有幸运币，造成等于所有幸运币掷出的点数之和的伤害</li>\n</ol>\n<p>幸运币可以等概率的投掷出 1～6 之间的点数。米小游想知道，<em>TeRiRi</em> 的套牌在一轮内击杀 BOSS 的概率</p>\n<h2 id=\"输入格式\"><a class=\"anchor\" href=\"#输入格式\">#</a> 输入格式</h2>\n<blockquote>\n<p>第一行输入两个整数 n (1&lt;n&lt;100)，h (1&lt;h&lt;10<sup>9</sup>)，分别表示卡牌张数和 BOSS 血量，接下来 n 行每行首先输入两个整数 t (1<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mo>&lt;</mo><mo>=</mo></mrow><annotation encoding=\"application/x-tex\">&lt;=</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.5782em;vertical-align:-0.0391em;\"></span><span class=\"mrel\">&lt;</span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.36687em;vertical-align:0em;\"></span><span class=\"mrel\">=</span></span></span></span>t$&lt;=$2)</p>\n<p>x(1<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mo>&lt;</mo><mo>=</mo></mrow><annotation encoding=\"application/x-tex\">&lt;=</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.5782em;vertical-align:-0.0391em;\"></span><span class=\"mrel\">&lt;</span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.36687em;vertical-align:0em;\"></span><span class=\"mrel\">=</span></span></span></span>x$&lt;=$10)，t 为 1 表示卡牌为时来运转，t 为 2 表示卡牌为幸运一掷。</p>\n</blockquote>\n<h1 id=\"思路\"><a class=\"anchor\" href=\"#思路\">#</a> 思路</h1>\n<ol>\n<li>首先判断是否为幸运一掷，如果是的话，BOSS 血量直接减去造成的 x 伤害，然后计算幸运币所造成的伤害总期望；如果为否的话，则不减去造成的 x 伤害</li>\n<li><strong>计算所有幸运币造成的伤害期望 (重点)</strong></li>\n</ol>\n<p>重点就在于如何计算幸运币造成的伤害期望。</p>\n<h1 id=\"代码\"><a class=\"anchor\" href=\"#代码\">#</a> 代码</h1>\n<pre><code class=\"language-c++\">#include&lt;iostream&gt;\n#include&lt;cmath&gt;\n#include&lt;cstring&gt;\nusing namespace std;\n\nint main() &#123;\n    int n,h,luck=0,tmp=0;\n    cin &gt;&gt; n &gt;&gt; h;\n    double p = 0;\n    for (int i = 0; i &lt; n; i++)\n    &#123;\n        int t,x;\n        cin &gt;&gt; t &gt;&gt; x;\n        if(t == 1) tmp += x; //缓存幸运金币 如果最后几张为时来运转则不计入总伤害\n        else &#123;\n            h -= x; // BOSS血量减去幸运一掷的固定伤害\n            luck += tmp; // 将缓存的幸运金币取出\n            tmp = 0; // 重制缓存\n        &#125;\n    &#125;\n    if (luck&gt;=h) p = 1; //如果幸运币总数大于等于boss剩余血量，则必击杀\n    else if (luck*6 &lt; h) p=0; //如果幸运币总数乘6小于boss剩余血量，则不可能击杀\n    else &#123;\n        // 计算所有幸运币造成伤害的总期望\n        double arr[luck][luck*6];\n        memset(arr, 0, sizeof(arr));\n        for(int i=0;i&lt;6;i++) arr[0][i]=1.0/6;\n\n        // for(int i=1;i&lt;luck;i++) &#123;\n        //     for(int j=i;j&lt;6;j++) \n        //         for(int k=i;k&lt;=j;k++) arr[i][j]+=arr[i-1][k]/6; //防止数组索引为负 arr[0][0]~arr[5][5]单独处理\n        //     for(int j=6;j&lt;6*luck;j++) \n        //         for(int k=1;k&lt;7;k++) arr[i][j]+=arr[i-1][j-k]/6;\n        // &#125;\n        for (int i=0;i&lt;luck;i++) &#123;\n            for (int j=i;j&lt;6*i;j++) &#123; // 第i次可能情况只有i～6*i\n                for (int k=1;k&lt;=6;k++) &#123;\n                    if (j-k&gt;0)  // 只有大于0才能状态转移\n                      arr[i][j] = arr[i-1][j-k] / 6;\n                &#125;\n            &#125;\n        &#125;\n\n        for(int i=luck*6-1;i&gt;=h-1;i--) &#123;\n            p+=arr[luck-1][i];\n        &#125;\n    &#125;\n    cout&lt;&lt;p&lt;&lt;endl;\n    return 0;\n&#125;\n</code></pre>\n<ul>\n<li>时间复杂度：O (n<sup>3</sup>)</li>\n</ul>\n",
+            "tags": [
+                "动态规划",
+                "米哈游",
+                "校招",
+                "笔试",
+                "动态规划",
+                "米哈游",
+                "校招",
+                "笔试"
+            ]
+        },
+        {
             "id": "http://badcandy0.github.io/2023/08/25/css3%E6%96%B0%E7%89%B9%E6%80%A7/",
             "url": "http://badcandy0.github.io/2023/08/25/css3%E6%96%B0%E7%89%B9%E6%80%A7/",
             "title": "css3新特性",

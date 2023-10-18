@@ -8,7 +8,95 @@
     <author>
       <name>badcandy</name>
     </author>
-    <updated>2023-08-25T09:02:36.243Z</updated>
+    <updated>2023-10-18T02:02:44.459Z</updated>
+    <entry>
+        <id>http://badcandy0.github.io/2023/10/18/%E7%B1%B3%E5%93%88%E6%B8%B8%E6%A0%A1%E6%8B%9B-dp%E7%AE%97%E6%B3%95/</id>
+        <title>米哈游校招-dp算法</title>
+        <link rel="alternate" href="http://badcandy0.github.io/2023/10/18/%E7%B1%B3%E5%93%88%E6%B8%B8%E6%A0%A1%E6%8B%9B-dp%E7%AE%97%E6%B3%95/"/>
+        <content type="html">&lt;h1 id=&#34;题目描述&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#题目描述&#34;&gt;#&lt;/a&gt; 题目描述&lt;/h1&gt;
+&lt;p&gt;米小游都快保底了还没抽到希儿，好生气哦！只能打会活动再拿点水晶了。米小游和世界第一可爱的魔法少女&lt;em&gt; TeRiRi&lt;/em&gt; 正在打 BOSS，当 BOSS 血量小于等于 0 时，BOSS 死亡。&lt;em&gt;TeRiRi&lt;/em&gt; 的血量为 h，有一套牌，在一轮中，他会按顺序一张一张的将卡牌打出，套牌中有两种卡牌：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;时来运转，获得 x 个幸运币&lt;/li&gt;
+&lt;li&gt;幸运一掷造成 x 点伤害，并投掷所有幸运币，造成等于所有幸运币掷出的点数之和的伤害&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;幸运币可以等概率的投掷出 1～6 之间的点数。米小游想知道，&lt;em&gt;TeRiRi&lt;/em&gt; 的套牌在一轮内击杀 BOSS 的概率&lt;/p&gt;
+&lt;h2 id=&#34;输入格式&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#输入格式&#34;&gt;#&lt;/a&gt; 输入格式&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;第一行输入两个整数 n (1&amp;lt;n&amp;lt;100)，h (1&amp;lt;h&amp;lt;10&lt;sup&gt;9&lt;/sup&gt;)，分别表示卡牌张数和 BOSS 血量，接下来 n 行每行首先输入两个整数 t (1&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math xmlns=&#34;http://www.w3.org/1998/Math/MathML&#34;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;&amp;lt;&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;&amp;lt;=&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.5782em;vertical-align:-0.0391em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;&amp;lt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.36687em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;=&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;t$&amp;lt;=$2)&lt;/p&gt;
+&lt;p&gt;x(1&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math xmlns=&#34;http://www.w3.org/1998/Math/MathML&#34;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;&amp;lt;&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;&amp;lt;=&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.5782em;vertical-align:-0.0391em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;&amp;lt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.36687em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;=&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;x$&amp;lt;=$10)，t 为 1 表示卡牌为时来运转，t 为 2 表示卡牌为幸运一掷。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;思路&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#思路&#34;&gt;#&lt;/a&gt; 思路&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;首先判断是否为幸运一掷，如果是的话，BOSS 血量直接减去造成的 x 伤害，然后计算幸运币所造成的伤害总期望；如果为否的话，则不减去造成的 x 伤害&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;计算所有幸运币造成的伤害期望 (重点)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;重点就在于如何计算幸运币造成的伤害期望。&lt;/p&gt;
+&lt;h1 id=&#34;代码&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#代码&#34;&gt;#&lt;/a&gt; 代码&lt;/h1&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include&amp;lt;iostream&amp;gt;
+#include&amp;lt;cmath&amp;gt;
+#include&amp;lt;cstring&amp;gt;
+using namespace std;
+
+int main() &amp;#123;
+    int n,h,luck=0,tmp=0;
+    cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; h;
+    double p = 0;
+    for (int i = 0; i &amp;lt; n; i++)
+    &amp;#123;
+        int t,x;
+        cin &amp;gt;&amp;gt; t &amp;gt;&amp;gt; x;
+        if(t == 1) tmp += x; //缓存幸运金币 如果最后几张为时来运转则不计入总伤害
+        else &amp;#123;
+            h -= x; // BOSS血量减去幸运一掷的固定伤害
+            luck += tmp; // 将缓存的幸运金币取出
+            tmp = 0; // 重制缓存
+        &amp;#125;
+    &amp;#125;
+    if (luck&amp;gt;=h) p = 1; //如果幸运币总数大于等于boss剩余血量，则必击杀
+    else if (luck*6 &amp;lt; h) p=0; //如果幸运币总数乘6小于boss剩余血量，则不可能击杀
+    else &amp;#123;
+        // 计算所有幸运币造成伤害的总期望
+        double arr[luck][luck*6];
+        memset(arr, 0, sizeof(arr));
+        for(int i=0;i&amp;lt;6;i++) arr[0][i]=1.0/6;
+
+        // for(int i=1;i&amp;lt;luck;i++) &amp;#123;
+        //     for(int j=i;j&amp;lt;6;j++) 
+        //         for(int k=i;k&amp;lt;=j;k++) arr[i][j]+=arr[i-1][k]/6; //防止数组索引为负 arr[0][0]~arr[5][5]单独处理
+        //     for(int j=6;j&amp;lt;6*luck;j++) 
+        //         for(int k=1;k&amp;lt;7;k++) arr[i][j]+=arr[i-1][j-k]/6;
+        // &amp;#125;
+        for (int i=0;i&amp;lt;luck;i++) &amp;#123;
+            for (int j=i;j&amp;lt;6*i;j++) &amp;#123; // 第i次可能情况只有i～6*i
+                for (int k=1;k&amp;lt;=6;k++) &amp;#123;
+                    if (j-k&amp;gt;0)  // 只有大于0才能状态转移
+                      arr[i][j] = arr[i-1][j-k] / 6;
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+
+        for(int i=luck*6-1;i&amp;gt;=h-1;i--) &amp;#123;
+            p+=arr[luck-1][i];
+        &amp;#125;
+    &amp;#125;
+    cout&amp;lt;&amp;lt;p&amp;lt;&amp;lt;endl;
+    return 0;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;时间复杂度：O (n&lt;sup&gt;3&lt;/sup&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+        <category term="动态规划" scheme="http://badcandy0.github.io/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" />
+        <category term="米哈游" scheme="http://badcandy0.github.io/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%B1%B3%E5%93%88%E6%B8%B8/" />
+        <category term="校招" scheme="http://badcandy0.github.io/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%B1%B3%E5%93%88%E6%B8%B8/%E6%A0%A1%E6%8B%9B/" />
+        <category term="笔试" scheme="http://badcandy0.github.io/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%B1%B3%E5%93%88%E6%B8%B8/%E6%A0%A1%E6%8B%9B/%E7%AC%94%E8%AF%95/" />
+        <category term="动态规划" scheme="http://badcandy0.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" />
+        <category term="米哈游" scheme="http://badcandy0.github.io/tags/%E7%B1%B3%E5%93%88%E6%B8%B8/" />
+        <category term="校招" scheme="http://badcandy0.github.io/tags/%E6%A0%A1%E6%8B%9B/" />
+        <category term="笔试" scheme="http://badcandy0.github.io/tags/%E7%AC%94%E8%AF%95/" />
+        <updated>2023-10-18T02:02:44.459Z</updated>
+    </entry>
     <entry>
         <id>http://badcandy0.github.io/2023/08/25/css3%E6%96%B0%E7%89%B9%E6%80%A7/</id>
         <title>css3新特性</title>
